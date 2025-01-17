@@ -60,8 +60,7 @@ const HomePage = (props) => {
     const [tableSportCenters, setTableSportCenters] = useState([]); // Set default value
 
     let defaultStartDate = dayjs()
-    const [startDate, setStartDate] = useState(defaultStartDate); // Set default value
-    setStartDate(defaultStartDate);
+    const [startDate] = useState(defaultStartDate); // Set default value
 
     const handleCenterChange = (event) => {
       const {
