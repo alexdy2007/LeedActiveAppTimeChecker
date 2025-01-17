@@ -61,7 +61,7 @@ const HomePage = (props) => {
 
     let defaultStartDate = dayjs()
     const [startDate, setStartDate] = useState(defaultStartDate); // Set default value
-
+    setStartDate(defaultStartDate);
 
     const handleCenterChange = (event) => {
       const {
