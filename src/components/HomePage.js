@@ -8,7 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+// import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
@@ -117,100 +117,102 @@ const HomePage = (props) => {
         if (!('token' in _storage)) {
             generateAuthToken().then((token) => {
                 _storage['token'] = token
+                getAvailableTimes()
+                
             })
         }
+
     });
 
     return (
+            <Box sx={{ flexGrow: 1, m: '2%'}}>
+                <h1>Leeds Active Sport</h1>
 
-        <Paper elevation={1} sx={{ m:'1', height:'100%'}}>
-            <h1>Leeds Active Sport</h1>
-
-            <Box sx={{ flexGrow: 1, m: '2%'}}> 
-                <Grid container spacing={1}>
-                    <Grid item xs={6} md={3}>
-                        <FormControl sx={{ m: 1, width:500}}>
-                            <InputLabel id="sportCenter">Sport Center</InputLabel>
-                                <Select fullWidth
-                                    labelId="sportCenter"
-                                    id="sportCenterSelect"
+                <Box sx={{ flexGrow: 1, m: '2%'}}> 
+                    <Grid container spacing={1}>
+                        <Grid item xs={6} md={3}>
+                            <FormControl sx={{ m: 1, width:500}}>
+                                <InputLabel id="sportCenter">Sport Center</InputLabel>
+                                    <Select fullWidth
+                                        labelId="sportCenter"
+                                        id="sportCenterSelect"
+                                        multiple
+                                        value={sportCenter}
+                                        onChange={handleCenterChange}
+                                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                                        renderValue={(selected) => (
+                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                                {selected.map((value) => (
+                                                    <Chip key={value} label={value} />
+                                                ))}
+                                            </Box>
+                                        )}
+                                        MenuProps={MenuProps}
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                        {sportCentersList.map((name) => (
+                                            <MenuItem
+                                                key={name}
+                                                value={name}
+                                                style={getStyles(name, sportCenter, theme)}
+                                                >
+                                            {name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select> 
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                            <FormControl sx={{ m: 1, width:300}}>
+                            <InputLabel id="sport">Sport</InputLabel>
+                            <Select fullWidth
+                                    labelId="Sport"
+                                    id="Sport"
                                     multiple
-                                    value={sportCenter}
-                                    onChange={handleCenterChange}
-                                    input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                                    value={sport}
+                                    onChange={handleSportChange}
+                                    input={<OutlinedInput id="sport-select-label" label="Chip" />}
                                     renderValue={(selected) => (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                             {selected.map((value) => (
                                                 <Chip key={value} label={value} />
                                             ))}
                                         </Box>
-)}
+                                    )}
                                     MenuProps={MenuProps}
-                                    inputProps={{ 'aria-label': 'Without label' }}
                                     >
-                                    {sportCentersList.map((name) => (
+                                    {sportsList.map((name) => (
                                         <MenuItem
                                             key={name}
                                             value={name}
-                                            style={getStyles(name, sportCenter, theme)}
-                                            >
+                                            style={getStyles(name, sport, theme)}
+                                        >
                                         {name}
                                         </MenuItem>
                                     ))}
-                                </Select> 
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={6} md={3}>
-                        <FormControl sx={{ m: 1, width:300}}>
-                        <InputLabel id="sport">Sport</InputLabel>
-                        <Select fullWidth
-                                labelId="Sport"
-                                id="Sport"
-                                multiple
-                                value={sport}
-                                onChange={handleSportChange}
-                                input={<OutlinedInput id="sport-select-label" label="Chip" />}
-                                renderValue={(selected) => (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {selected.map((value) => (
-                                            <Chip key={value} label={value} />
-                                        ))}
-                                    </Box>
-                                )}
-                                MenuProps={MenuProps}
-                                >
-                                {sportsList.map((name) => (
-                                    <MenuItem
-                                        key={name}
-                                        value={name}
-                                        style={getStyles(name, sport, theme)}
-                                    >
-                                    {name}
-                                    </MenuItem>
-                                ))}
-                        </Select> 
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={4} md={2} sx={{ m: 1}}>
-                        <Button onClick={getAvailableTimes} variant="contained">Search</Button>
-                    </Grid>
-                </Grid>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, m: '2%'}}> 
-                <Grid container spacing={1}>
-                    {availableDates.map((date) => (
-                        <Grid item xs={1} md={1} sx={{ m: 1}}>
-                            <Button onClick={() => changeDate(date)} color={date===selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('ddd D MMM')}</Button>
+                            </Select> 
+                            </FormControl>
                         </Grid>
-                    ))}
-                </Grid>
+                        <Grid item xs={4} md={2} sx={{ m: 1}}>
+                            <Button onClick={getAvailableTimes} variant="contained">Search</Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+
+                <Box sx={{ flexGrow: 1, m: '1%'}}> 
+                    <Grid container spacing={0}>
+                        {availableDates.map((date) => (
+                            <Grid item xs={1} md={1} sx={{ m: 1}}>
+                                <Button onClick={() => changeDate(date)} color={date===selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('ddd D MMM')}</Button>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+                
+                <Box sx={{ flexGrow: 1, m: '3%'}}>
+                    <SportTimeTable tableData={tableData} sportCenters={tableSportCenters}/>
+                </Box>
             </Box>
-            
-            <Box sx={{ flexGrow: 1, m: '3%'}}>
-                <SportTimeTable tableData={tableData} sportCenters={tableSportCenters}/>
-            </Box>
-        </Paper>
     )
 
 }

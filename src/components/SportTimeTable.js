@@ -22,16 +22,16 @@ export default function SportTimeTable(props) {
     let sportCenter = props.sportCenters
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ minWidth: 440 }}>
-                <Table sx={{ minWidth: 300 }} aria-label="simple table">
+        <Paper sx={{ width: '100%', overflow:'hidden'}}>
+            <TableContainer sx={{ minWidth: 600 }}>
+                <Table sx={{ minWidth: 600 }} stickyHeader aria-label="sticky table">
                     <TableHead>
-                    <TableRow>
-                        <TableCell align="left">Time</TableCell>
-                            {sportCenter.map((center) => (
-                            <TableCell align="left">{getSportCenterNameGivenCode(center)}</TableCell>
-                            ))}
-                    </TableRow>
+                        <TableRow>
+                            {sportCenter.length > 0 ? <TableCell align="left">Time</TableCell> : <div></div>}
+                                {sportCenter.map((center) => (
+                                <TableCell align="left">{getSportCenterNameGivenCode(center)}</TableCell>
+                                ))}
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {tabledata.map((row) => (
