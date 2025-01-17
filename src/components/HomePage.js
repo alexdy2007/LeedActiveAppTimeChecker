@@ -106,7 +106,7 @@ const HomePage = (props) => {
         if (allTimeData[date] !== undefined) {
             let timeOrientedData = makeTimeBasedTableData(allTimeData[date])
             setTableData(timeOrientedData)
-            let tableSportCenters= Object.keys(allTimeData[availableDates[0]]).sort()
+            let tableSportCenters= Object.keys(allTimeData[date]).sort()
             setTableSportCenters(tableSportCenters)
         }
         setSelectedDate(date)
