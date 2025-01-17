@@ -48,6 +48,8 @@ export const processAvailabilityTabular = (sport_time_data, startDateStr) => {
             for (let slot of location.slots){
                 let startTime = convertToTime(slot.startTime)
                 if (slot['availability']['inCentre'] === 1 && slot['status'] === 'Available'){
+                    let slotRefObj = JSON.parse(slot['slotReferences']['inCentre'])
+                    siteAvailablity[item.date][item.siteId]['siteRef'] = slotRefObj['ActivityId']
                     if(startTime in siteAvailablity[item.date][item.siteId]){
                         siteAvailablity[item.date][item.siteId][startTime].push(location.locationNameToDisplay)
                     }else{
@@ -77,7 +79,8 @@ export const processAvailabilityTabular = (sport_time_data, startDateStr) => {
                         availability_data_full[availableDate][siteId] = []
                     }
                     if ((time in siteAvailablity[availableDate][siteId])){
-                        availability_data_full[availableDate][siteId].push({'available': 1, 'time':time, 'courts': siteAvailablity[availableDate][siteId][time]});
+             
+                        availability_data_full[availableDate][siteId].push({'available': 1, 'time':time, 'courts': siteAvailablity[availableDate][siteId][time], 'siteRef':siteAvailablity[availableDate][siteId]['siteRef'], 'startTimeRef':dayjs(availableDate).toISOString()});
                     }else{
                         availability_data_full[availableDate][siteId].push({'available': 0, 'time':time, 'courts': []});
                     }
@@ -90,6 +93,7 @@ export const processAvailabilityTabular = (sport_time_data, startDateStr) => {
 };
 
 export const makeTimeBasedTableData = (tabledata) => {
+    ///Returns in format {time:[{availability:1, courts:[]},{avaliability:0},{availability:0}]}
     if (Object.keys(tabledata).length > 0){
         let firstKey = Object.keys(tabledata)[0]; // "used to generate all times"
         let timeOrientedData = tabledata[firstKey].map((item) => [item.time])

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {generateAuthToken} from '../api/auth';
-import { getSportCenters, getSports } from '../data/ActiveCodes';
+import { getSportCenters, getSports} from '../data/ActiveCodes';
 import { useTheme } from '@mui/material/styles';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -206,7 +206,7 @@ const HomePage = (props) => {
                 <Grid container spacing={1}>
                     {availableDates.map((date) => (
                         <Grid item xs={1} md={1} sx={{ m: 1}}>
-                            <Button onClick={() => changeDate(date)} color={date==selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('DD/MM/YYYY')}</Button>
+                            <Button onClick={() => changeDate(date)} color={date==selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('ddd D MMM')}</Button>
                         </Grid>
                     ))}
                 </Grid>

@@ -35,7 +35,6 @@ export const getAvailableBookings = async (sports_centers, sport, date_from, aut
 
     let date_from_iso = date_from
     let urls = generateUrlsGivenSites(sportCenterList, date_from_iso)
-    let url = urls[0]
 
     let headers = {
         "accept": "application/json, text/plain, */*",
@@ -45,22 +44,30 @@ export const getAvailableBookings = async (sports_centers, sport, date_from, aut
         "pragma": "no-cache",
         "priority": "u=1, i",
     }
-
-
-    let request = fetch(url, {
-        method: 'GET',
-        headers: headers
-    })
     
-    return request.then( async (res) => {
-        let data =  await res.json()
-        return data
-    }).catch((e) => {
-        console.error(e)
-        throw new Error(e, 'Error fetching data')
-    });
-}
 
+    let requests = urls.map(async (url) => {
+        return fetch(url, {
+            method: 'GET',
+            headers: headers
+        }).then( async (res) => {
+            let data =  await res.json()
+            return data
+        }).catch((e) => {
+            console.error(e)
+            throw new Error(e, 'Error fetching data')
+        })
+ 
+    })
+
+    let response_data = []
+
+    return Promise.all(requests)
+    .then((responses) => {
+        return responses.flat(1)
+    });
+    
+}
 
 
 
