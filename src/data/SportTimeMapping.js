@@ -71,9 +71,8 @@ export const processAvailabilityTabular = (sport_time_data, startDateStr) => {
 
         Object.keys(siteAvailablity).forEach(availableDate => { 
             let temp_key = (' ' + availableDate).slice(1);
-            let temp_dict = {}
             availability_data_full[temp_key] = []
-            for (const [i, time] of hourlyTimes.entries()) {
+            for (const time of hourlyTimes.entries()) {
                 Object.keys(siteAvailablity[availableDate]).forEach(siteId => {
                     if (!(siteId in availability_data_full[availableDate])){
                         availability_data_full[availableDate][siteId] = []

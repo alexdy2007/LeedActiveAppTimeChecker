@@ -6,17 +6,13 @@ import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
@@ -206,7 +202,7 @@ const HomePage = (props) => {
                 <Grid container spacing={1}>
                     {availableDates.map((date) => (
                         <Grid item xs={1} md={1} sx={{ m: 1}}>
-                            <Button onClick={() => changeDate(date)} color={date==selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('ddd D MMM')}</Button>
+                            <Button onClick={() => changeDate(date)} color={date===selectedDate ? 'success' : ''} variant="contained">{dayjs(date).format('ddd D MMM')}</Button>
                         </Grid>
                     ))}
                 </Grid>

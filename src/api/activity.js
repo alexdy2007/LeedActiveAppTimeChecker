@@ -60,8 +60,6 @@ export const getAvailableBookings = async (sports_centers, sport, date_from, aut
  
     })
 
-    let response_data = []
-
     return Promise.all(requests)
     .then((responses) => {
         return responses.flat(1)
