@@ -16,45 +16,79 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import {getSportCenterNameGivenCode} from '../data/ActiveCodes';
 
 
+const stickyCol = {
+    position: 'sticky',
+    left: 0,
+    backgroundColor: 'background.paper',
+    fontWeight: 600,
+    whiteSpace: 'nowrap',
+    borderRight: 1,
+    borderRightColor: 'divider',
+};
+
+const cellSx = {
+    px: { xs: 0.75, sm: 2 },
+    py: { xs: 0.25, sm: 0.75 },
+};
+
 export default function SportTimeTable(props) {
 
     let tabledata = props.tableData
     let sportCenter = props.sportCenters
 
+    if (sportCenter.length === 0) {
+        return null
+    }
+
     return (
-        <Paper sx={{ width: '100%', overflow:'hidden'}}>
-            <TableContainer sx={{ minWidth: 600 }}>
-                <Table sx={{ minWidth: 600 }} stickyHeader aria-label="sticky table">
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: { xs: '70vh', md: '75vh' }, overflowX: 'auto' }}>
+                <Table size="small" stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            {sportCenter.length > 0 ? <TableCell align="left">Time</TableCell> : <div></div>}
-                                {sportCenter.map((center) => (
-                                <TableCell align="left">{getSportCenterNameGivenCode(center)}</TableCell>
-                                ))}
+                            <TableCell align="left" sx={{ ...cellSx, ...stickyCol, zIndex: 3 }}>Time</TableCell>
+                            {sportCenter.map((center) => (
+                                <TableCell
+                                    key={center}
+                                    align="center"
+                                    sx={{
+                                        ...cellSx,
+                                        fontWeight: 600,
+                                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                                        minWidth: { xs: 72, sm: 110 },
+                                        lineHeight: 1.2,
+                                        verticalAlign: 'bottom',
+                                    }}
+                                >
+                                    {getSportCenterNameGivenCode(center)}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tabledata.map((row) => (
-                            <TableRow key={row}>
+                        {tabledata.map((row, rowIndex) => (
+                            <TableRow key={rowIndex} hover>
                                 {row.map((slot, i) => (
-                                    i === 0 ? 
-                                    <TableCell align='left'>{slot}</TableCell> :
-                                    <TableCell align='left'>{slot['available']===1 ?
-                                        <Tooltip title={slot['courts'].join(', \r\n')}>
-                                            <Link href={`https://activeleeds.gladstonego.cloud/book/calendar/${slot['siteRef']}?activityDate=${slot['startTimeRef']}`} underline="always">
-                                                <IconButton color='success'>
-                                                    <DoneRoundedIcon/>
-                                                </IconButton>
-                                            </Link>
+                                    i === 0 ?
+                                    <TableCell key={i} align='left' sx={{ ...cellSx, ...stickyCol, zIndex: 1 }}>{slot}</TableCell> :
+                                    <TableCell key={i} align='center' sx={cellSx}>{slot['available']===1 ?
+                                        <Tooltip title={slot['courts'].join(', ')} enterTouchDelay={0}>
+                                            <IconButton
+                                                color='success'
+                                                component={Link}
+                                                href={`https://activeleeds.gladstonego.cloud/book/calendar/${slot['siteRef']}?activityDate=${slot['startTimeRef']}`}
+                                                aria-label="Book this slot"
+                                            >
+                                                <DoneRoundedIcon/>
+                                            </IconButton>
                                         </Tooltip>:
-                                        <IconButton disabled>
+                                        <IconButton disabled aria-label="Unavailable">
                                             <CloseRoundedIcon/>
                                         </IconButton>}
                                     </TableCell>
                                     ))}
                             </TableRow>
                         ))}
-                    
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -62,4 +96,3 @@ export default function SportTimeTable(props) {
     );
 
 }
-

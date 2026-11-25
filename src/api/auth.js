@@ -43,21 +43,26 @@ class Decryptor {
     }
 }
 
-export const getAnonToken = async() => {
-    return fetch(ANNON_TOKEN_URL).then( (res) => {
-        console.log(res)
-        return res.text();
-    }).catch( (error) => {
-        console.error(error)
-    });
+export const getAnonToken = async () => {
+    const res = await fetch(ANNON_TOKEN_URL);
+    if (!res.ok) {
+        throw new Error(`Leeds Active sign-in failed (HTTP ${res.status}). The site may be blocking requests right now - try again later.`);
+    }
+    return res.text();
 };
 
 export const generateAuthToken = async () => {
-    let annon_token = await getAnonToken();
+    const annon_token = (await getAnonToken()).trim();
     const decryptor = new Decryptor();
 
-    let token_dict = await decryptor.decryptToken(annon_token)
-    let auth_token = token_dict.Token;
-    return auth_token
+    let token_dict;
+    try {
+        token_dict = await decryptor.decryptToken(annon_token);
+    } catch (e) {
+        throw new Error('Leeds Active returned an unexpected sign-in response (could not decode the token).');
+    }
+    if (!token_dict || !token_dict.Token) {
+        throw new Error('Leeds Active sign-in response did not contain a token.');
+    }
+    return token_dict.Token;
 };
-
